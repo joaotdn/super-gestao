@@ -1,57 +1,45 @@
-<h1>Fornecedor</h1>
+<h3>Fornecedor</h3>
 
 @php
-    
+    /*
+    if(empty($variavel)) {} //retornar true se a variável estiver vazia
+    - ''
+    - 0
+    - 0.0
+    - '0'
+    - null
+    - false
+    - array()
+    - $var
+    */
 @endphp
 
-{{-- @dd($fornecedores) --}}
+@isset($fornecedores)
 
-{{-- @if (count($fornecedores) > 0 && count($fornecedores) < 10)
-    <h3>Existem alguns fornecedores</h3>
-@elseif(count($fornecedores) > 10)
-    <h3>Existem muitos fornecedores</h3>
-@else 
-    <h3>Ainda não exitem fornecedores</h3>
-@endif --}}
-{{-- 
-@unless ($fornecedores[0]['status'] == 'S')
-    Fornecedor Inativo
-@endunless --}}
+    @forelse($fornecedores as $indice => $fornecedor)
+        Iteração atual: {{ $loop->iteration }}
+        <br>
+        Fornecedor: {{ $fornecedor['nome'] }}
+        <br>
+        Status: {{ $fornecedor['status'] }}
+        <br>
+        CNPJ: {{ $fornecedor['cnpj'] ?? '' }}
+        <br>
+        Telefone: ({{ $fornecedor['ddd'] ?? '' }}) {{ $fornecedor['telefone'] ?? '' }}
+        <br>
+        @if($loop->first)
+            Primeira iteração no loop
 
-{{-- @isset($fornecedores)
-    @isset($fornecedores[1])
-        Exite 2 fornecedores
-    @endisset
-@endisset --}}
+            <br>
+            Total de registros: {{ $loop->count }}
+        @endif
 
-{{-- @empty($fornecedores)
-    <p>Não existe fornecedores</p>
-@endempty --}}
-
-{{-- @isset($fornecedores)
-    @forelse ($fornecedores as $fornecedor)
-    Iteração atual {{ $loop->iteration }}
-    CNPJ:  {{ $fornecedor['cnpj'] ?? 'Não preenchido'  }}
-    <br>
-    Cidade: {{ $fornecedor['ddd'] ?? 'Não preenchido' }}
-    @switch($fornecedor['ddd'])
-        @case('11')
-            São Paulo
-            @break
-        @case('32')
-            Juiz de Fora
-            @break
-        @case('85')
-            Fortaleza
-            @break
-        @default
-            Não exite
-    @endswitch
-    @if ($loop->last)
-        Última iteração
-    @endif
-    <hr>
+        @if($loop->last)
+            Última iteração no loop
+        @endif
+        <hr>
     @empty
-        <p>Não exite fornecedor</p>
+        Não existem fornecedores cadastrados!!!
     @endforelse
-@endisset --}}
+@endisset
+
