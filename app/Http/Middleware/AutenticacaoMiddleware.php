@@ -15,19 +15,10 @@ class AutenticacaoMiddleware
      */
     public function handle($request, Closure $next, $metodo_autenticacao, $perfil)
     {
-        
-        if ($metodo_autenticacao == 'padrao') {
-            echo "Padrao - $perfil<br>";
-        }
-
-        if ($metodo_autenticacao == 'ldap') {
-            echo "AD - $perfil<br>";
-        }
-
-        if (false) {
+        session_start();
+        if (isset($_SESSION['email']) && $_SESSION['email'] != '') {
             return $next($request);
         }
-
-        return Response('Acesso negado!');
+        return redirect()->route('site.login', ['erro' => 2]);
     }
 }
