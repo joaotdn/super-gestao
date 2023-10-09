@@ -11,7 +11,7 @@ class LoginController extends Controller
         $erro = '';
 
         if ($request->get('erro') == 1) {
-            $erro = 'Usuário e/ou senha inválido(s)';
+            $erro = 'Usuário e/ou senha inválidos';
         }
 
         if ($request->get('erro') == 2) {

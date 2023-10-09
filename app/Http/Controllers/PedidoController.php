@@ -3,9 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Cliente;
+use App\Pedido;
 use Illuminate\Http\Request;
 
-class ClienteController extends Controller
+class PedidoController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,8 +15,8 @@ class ClienteController extends Controller
      */
     public function index(Request $request)
     {
-        $clientes = Cliente::paginate(10);
-        return view('app.cliente.index', ['clientes' => $clientes, 'request' => $request->all()]);
+        $pedidos = Pedido::paginate(10);
+        return view('app.pedido.index', ['pedidos' => $pedidos, 'request' => $request->all()]);
     }
 
     /**
@@ -25,7 +26,8 @@ class ClienteController extends Controller
      */
     public function create()
     {
-        return view('app.cliente.create');
+        $clientes = Cliente::all();
+        return view('app.pedido.create', ['clientes' => $clientes]);
     }
 
     /**
@@ -37,18 +39,16 @@ class ClienteController extends Controller
     public function store(Request $request)
     {
         $regras = [
-            'nome' => 'required|min:5|max:50'
+            'cliente_id' => 'exists:clientes,id'
         ];
         $feedback = [
-            'required' => 'O campo :attribute é obrigatório',
-            'nome.min' => 'O nome deve ter no mínimo 5 caracteres',
-            'nome.max' => 'O nome deve ter no máximo 50 caracteres',
+            'cliente_id.exists' => 'O cliente não existe'
         ];
         $request->validate($regras, $feedback);
 
-        Cliente::create($request->all());
+        Pedido::create($request->all());
 
-        return redirect()->route('cliente.index');
+        return redirect()->route('pedido.index');
     }
 
     /**
@@ -57,9 +57,9 @@ class ClienteController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Cliente $cliente)
+    public function show(Pedido $pedido)
     {
-        return view('app.cliente.show', ['cliente' => $cliente]);
+        return view('app.pedido.show', ['pedido' => $pedido]);
     }
 
     /**
@@ -68,9 +68,10 @@ class ClienteController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Cliente $cliente)
+    public function edit(Pedido $pedido)
     {
-        return view('app.cliente.edit', ['cliente' => $cliente]);
+        $clientes = Cliente::all();
+        return view('app.pedido.edit', ['clientes' => $clientes, 'pedido' => $pedido]);
     }
 
     /**
@@ -80,21 +81,19 @@ class ClienteController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Cliente $cliente)
+    public function update(Request $request, Pedido $pedido)
     {
         $regras = [
-            'nome' => 'required|min:5|max:50'
+            'cliente_id' => 'exists:clientes,id'
         ];
         $feedback = [
-            'required' => 'O campo :attribute é obrigatório',
-            'nome.min' => 'O nome deve ter no mínimo 5 caracteres',
-            'nome.max' => 'O nome deve ter no máximo 50 caracteres',
+            'cliente_id.exists' => 'O cliente não existe'
         ];
         $request->validate($regras, $feedback);
 
-        $cliente->update($request->all());
+        $pedido->update($request->all());
 
-        return redirect()->route('cliente.index');
+        return redirect()->route('pedido.index');
     }
 
     /**
@@ -103,9 +102,9 @@ class ClienteController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Cliente $cliente)
+    public function destroy(Pedido $pedido)
     {
-        $cliente->delete();
-        return redirect()->route('cliente.index');
+        $pedido->delete();
+        return redirect()->route('pedido.index');
     }
 }
